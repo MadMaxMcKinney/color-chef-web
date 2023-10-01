@@ -2,7 +2,14 @@
 export default {
     content: ['./src/**/*.{html,js,svelte,ts}'],
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                sans: ['Inter var']
+            },
+            colors: {
+                'dark-brown': '#3A300A'
+            }
+        }
     },
     plugins: []
 };
