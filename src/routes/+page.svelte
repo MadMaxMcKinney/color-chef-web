@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { fade, fly } from 'svelte/transition';
+    import { cubicInOut } from 'svelte/easing';
     import logo from '$lib/assets/color-chef-logo.svg';
-    import Palettes from '$lib/components/Palette.svelte';
     import IconInfo from 'virtual:icons/ph/info-fill';
-    import type { ActionData, PageData } from './$types';
+    import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
     import Palette from '$lib/components/Palette.svelte';
 
@@ -11,6 +12,7 @@
         applyAction: false,
         async onResult({ result }) {
             if (result.type === 'success') {
+                palette = undefined;
                 let res = await fetch(`/api/palette?prompt=${$form.prompt}`, {
                     method: 'GET'
                 });
@@ -18,13 +20,18 @@
                 let data = await res.json();
                 // Parse the data following the OpenAI schema https://platform.openai.com/docs/api-reference/chat/object
                 palette = JSON.parse(data.message.content);
+                fetchingPalette = false;
                 console.log(palette);
             }
+        },
+        onSubmit() {
+            fetchingPalette = true;
         }
     });
 
     let showExamples: boolean = false;
-    let palette: PaletteColor[];
+    let fetchingPalette: boolean = false;
+    let palette: PaletteColor[] | undefined = undefined;
 
     // Client side length limit for the prompt. The server will also check this.
     $: {
@@ -71,8 +78,13 @@
             </div>
         </form>
     </div>
-    {#if palette}
+    {#if fetchingPalette}
         <div class="mt-8">
+            <div class="rounded-2xl w-full h-32 bg-amber-400 animate-pulse" />
+        </div>
+    {/if}
+    {#if palette}
+        <div class="mt-8" in:fly={{ duration: 2000, y: 24 }}>
             <Palette colors={palette} />
         </div>
     {/if}

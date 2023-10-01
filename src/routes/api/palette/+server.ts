@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ url }) => {
             {
                 role: 'system',
                 content:
-                    'You are a color specialist. You help people find colors that will work well based on a prompt explaining how they will use the colors. You will respond only with an array of color objects, where each object has a field named hex for the hex value of the color, and another field named name for the name of the color. You will always provide only 5 color objects.'
+                    'You are a color specialist. You help people find colors that will work well based on a prompt explaining how they will use the colors. You will respond only with an array of color objects, where each object has a field named hex for the hex value of the color, and another field named name for the name of the color. You will always provide only 5 color objects. Reminder you should only respond with an array. Do not provide any other information.'
             },
             {
                 role: 'user',
@@ -22,5 +22,6 @@ export const GET: RequestHandler = async ({ url }) => {
         ],
         model: 'gpt-3.5-turbo'
     });
+    // TODO: Make sure the response is valid. The model is not perfect and sometimes responds with additional information beyond the array of colors. We should ideally only return the array of colors.
     return Response.json(completion.choices[0]);
 };
