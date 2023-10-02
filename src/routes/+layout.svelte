@@ -10,6 +10,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="Generate a color palette by describing how it will be used. The Chef will do the rest, sit back and enjoy!" />
     <meta property="og:image" content="https://colorchef.app/color-chef-openg-image.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
 </svelte:head>
 
 <slot />
