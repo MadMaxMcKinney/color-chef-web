@@ -5,6 +5,7 @@
     import IconInfo from 'virtual:icons/ph/info-fill';
     import IconClose from 'virtual:icons/ph/x';
     import IconCookingPot from 'virtual:icons/ph/cooking-pot-fill';
+    import IconCopy from 'virtual:icons/ph/clipboard-text-fill';
     import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
     import Palette from '$lib/components/Palette.svelte';
@@ -47,9 +48,16 @@
 
 <div class="max-w-[550px] px-6 mt-20 flex flex-col mx-auto">
     <img src={logo} alt="Color chef" class="w-full" />
-    <section class="mt-14">
+    <section class="mt-14 flex flex-col gap-4">
         <p class="font-bold text-lg">How to use</p>
-        <p class="font-medium text-lg">Generate a color palette by describing how it will be used. <br /> <span class="italic font-semibold">The Chef</span> will do the rest, sit back and enjoy!</p>
+        <span class="flex flex-row gap-2 items-start">
+            <IconInfo style="font-size: 24px" />
+            <p class="font-medium text-lg w-full">Generate a color palette by describing how it will be used. <span class="italic font-semibold">The Chef</span> will do the rest, sit back and enjoy!</p>
+        </span>
+        <span class="flex flex-row gap-2 items-center">
+            <IconCopy style="font-size: 24px" />
+            <p class="font-medium text-lg w-full">Click on a color to copy it’s hex value.</p>
+        </span>
     </section>
     <div class="mt-16">
         <form method="POST" use:enhance>
