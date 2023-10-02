@@ -80,7 +80,7 @@
     </div>
     {#if fetchingPalette}
         <div class="mt-8">
-            <div class="rounded-2xl w-full h-32 bg-amber-400 animate-pulse" />
+            <div class="rounded-2xl w-full h-32 bg-amber-400 animate-pulse flex justify-center items-center font-medium">⏲️ Palette in the oven...</div>
         </div>
     {/if}
     {#if palette}

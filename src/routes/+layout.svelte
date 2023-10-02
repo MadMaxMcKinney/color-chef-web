@@ -1,5 +1,6 @@
 <script lang="ts">
     import '$lib/app.css';
+    import { Toaster } from 'svelte-french-toast';
 </script>
 
 <svelte:head>
@@ -8,3 +9,5 @@
 </svelte:head>
 
 <slot />
+
+<Toaster toastOptions={{ style: 'border: 3px solid #3A300A; color: #3A300A;' }} />
