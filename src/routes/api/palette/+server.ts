@@ -22,6 +22,20 @@ export const GET: RequestHandler = async ({ url }) => {
         ],
         model: 'gpt-3.5-turbo'
     });
+
+    let newPalette: Palette;
+
+    try {
+        // Parse the data following the OpenAI schema https://platform.openai.com/docs/api-reference/chat/object
+        newPalette = {
+            name: prompt!,
+            colors: JSON.parse(completion.choices[0].message.content!) as PaletteColor[]
+        };
+    } catch (e) {
+        return Response.json({ error: e }, { status: 400 });
+    }
+
     // TODO: Make sure the response is valid. The model is not perfect and sometimes responds with additional information beyond the array of colors. We should ideally only return the array of colors.
-    return Response.json(completion.choices[0]);
+    console.log('Palette generated: ', newPalette);
+    return Response.json(newPalette);
 };

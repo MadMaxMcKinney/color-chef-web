@@ -1,4 +1,4 @@
-interface PaletteColorCollection {
+interface Palette {
     name: string;
     colors: PaletteColor[];
 }

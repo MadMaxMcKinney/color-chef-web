@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { fade, fly } from 'svelte/transition';
-    import { cubicInOut } from 'svelte/easing';
+    import { fade } from 'svelte/transition';
+    import { flip } from 'svelte/animate';
     import logo from '$lib/assets/color-chef-logo.svg';
     import IconInfo from 'virtual:icons/ph/info-fill';
+    import IconClose from 'virtual:icons/ph/x';
+    import IconCookingPot from 'virtual:icons/ph/cooking-pot-fill';
     import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
     import Palette from '$lib/components/Palette.svelte';
@@ -10,28 +12,30 @@
     export let data: PageData;
     const { form, enhance, errors } = superForm(data.form, {
         applyAction: false,
+        resetForm: true,
         async onResult({ result }) {
             if (result.type === 'success') {
-                palette = undefined;
+                // Result the current palette
+                fetchingPalette = true;
+
+                // Fetch the palette from the server
                 let res = await fetch(`/api/palette?prompt=${$form.prompt}`, {
                     method: 'GET'
                 });
-                // Get the data from the response
-                let data = await res.json();
-                // Parse the data following the OpenAI schema https://platform.openai.com/docs/api-reference/chat/object
-                palette = JSON.parse(data.message.content);
+
+                let newPalette = await res.json();
+                // Svelte doesn't rerender when you push to an array, so we need to create a new array with the new palette
+                palettes = [newPalette, ...palettes];
+
+                // Stop the loading animation
                 fetchingPalette = false;
-                console.log(palette);
             }
-        },
-        onSubmit() {
-            fetchingPalette = true;
         }
     });
 
     let showExamples: boolean = false;
     let fetchingPalette: boolean = false;
-    let palette: PaletteColor[] | undefined = undefined;
+    let palettes: any[] = [];
 
     // Client side length limit for the prompt. The server will also check this.
     $: {
@@ -45,13 +49,13 @@
     <img src={logo} alt="Color chef" class="w-full" />
     <section class="mt-14">
         <p class="font-bold text-lg">How to use</p>
-        <p class="font-medium text-lg">Generate a color palette by describing how it will be used. <br /> <span class="italic">The Chef</span> will do the rest, sick back and enjoy!</p>
+        <p class="font-medium text-lg">Generate a color palette by describing how it will be used. <br /> <span class="italic font-semibold">The Chef</span> will do the rest, sit back and enjoy!</p>
     </section>
     <div class="mt-16">
         <form method="POST" use:enhance>
             <div class="flex flex-col gap-2">
                 {#if showExamples}
-                    <button type="button" on:click={() => (showExamples = false)} class="flex gap-1 items-center self-end text-amber-500 font-medium transition-all hover:text-amber-400 hover:cursor-pointer">Hide examples</button>
+                    <button type="button" on:click={() => (showExamples = false)} class="flex gap-1 items-center self-end text-amber-600 font-medium transition-all hover:text-amber-500 hover:cursor-pointer">Hide examples <IconClose /></button>
                     <div class="p-4 rounded-2xl border-amber-500 border-[3px] border-dashed text-amber-500 mb-4 mt-2">
                         <ul class="font-medium list-disc pl-4">
                             <li>Cozy painting vibes</li>
@@ -60,7 +64,7 @@
                         </ul>
                     </div>
                 {:else}
-                    <button type="button" on:click={() => (showExamples = true)} class="flex gap-1 items-center self-end text-amber-500 font-medium transition-all hover:text-amber-400 hover:cursor-pointer">Show examples <IconInfo /></button>
+                    <button type="button" on:click={() => (showExamples = true)} class="flex gap-1 items-center self-end text-amber-600 font-medium transition-all hover:text-amber-500 hover:cursor-pointer">Show examples <IconInfo /></button>
                 {/if}
 
                 <input
@@ -73,22 +77,31 @@
                     {#if $errors.prompt}
                         <span class="font-medium text-red-600 flex-1">{$errors.prompt}</span>
                     {/if}
-                    <span class="text-amber-500 font-medium text-sm">{$form.prompt.length}/100</span>
+                    <span class="text-dark-brown font-medium text-sm">{$form.prompt.length}/100</span>
                 </div>
             </div>
         </form>
     </div>
     {#if fetchingPalette}
         <div class="mt-8">
-            <div class="rounded-2xl w-full h-32 bg-amber-400 animate-pulse flex justify-center items-center font-medium">⏲️ Palette in the oven...</div>
+            <div class="rounded-2xl w-full h-32 font-bold relative flex justify-center items-center overflow-hidden">
+                <span class="absolute z-10 flex flex-row gap-2 items-center"><IconCookingPot /> Palette in the oven. Cooking...</span>
+                <span class="bg-amber-300 w-full h-full animate-pulse-1" />
+                <span class="bg-amber-300 w-full h-full animate-pulse-2" />
+                <span class="bg-amber-300 w-full h-full animate-pulse-3" />
+                <span class="bg-amber-300 w-full h-full animate-pulse-4" />
+                <span class="bg-amber-300 w-full h-full animate-pulse-5" />
+            </div>
         </div>
     {/if}
-    {#if palette}
-        <div class="mt-8" in:fly={{ duration: 2000, y: 24 }}>
-            <Palette colors={palette} />
-        </div>
-    {/if}
+    <div class="mt-16 flex flex-col gap-8">
+        {#each palettes as palette (palette)}
+            <div in:fade={{ duration: 1000 }} animate:flip={{ duration: 700 }}>
+                <Palette {palette} />
+            </div>
+        {/each}
+    </div>
     <footer class="font-medium flex justify-center items-center pb-8 pt-32">
-        <p>A weekend project by <a href="https://maxmckinney.com" class="underline font-bold">Max McKinney</a></p>
+        <p>A weekend project by <a href="https://maxmckinney.com" class="underline font-medium text-amber-600 transition-colors hover:text-amber-500">Max McKinney</a></p>
     </footer>
 </div>
