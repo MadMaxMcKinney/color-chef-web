@@ -1,5 +1,5 @@
 <script lang="ts">
-    import IconCopy from 'virtual:icons/ph/clipboard';
+    import IconCopy from 'virtual:icons/ph/clipboard-text-bold';
     import toast from 'svelte-french-toast';
 
     export let palette: Palette;

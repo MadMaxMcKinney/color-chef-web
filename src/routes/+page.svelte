@@ -2,10 +2,10 @@
     import { fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     import logo from '$lib/assets/color-chef-logo.svg';
-    import IconInfo from 'virtual:icons/ph/info-fill';
+    import IconInfo from 'virtual:icons/ph/info-bold';
     import IconClose from 'virtual:icons/ph/x';
-    import IconCookingPot from 'virtual:icons/ph/cooking-pot-fill';
-    import IconCopy from 'virtual:icons/ph/clipboard-text-fill';
+    import IconCookingPot from 'virtual:icons/ph/cooking-pot-bold';
+    import IconCopy from 'virtual:icons/ph/clipboard-text-bold';
     import type { PageData } from './$types';
     import { superForm } from 'sveltekit-superforms/client';
     import Palette from '$lib/components/Palette.svelte';
@@ -47,7 +47,9 @@
 </script>
 
 <div class="max-w-[550px] px-6 mt-20 flex flex-col mx-auto">
-    <img src={logo} alt="Color chef" class="w-full" />
+    <div class="w-full flex justify-center">
+        <img src={logo} alt="Color chef" class="w-full max-w-sm" />
+    </div>
     <section class="mt-14 flex flex-col gap-4">
         <p class="font-bold text-lg">How to use</p>
         <span class="flex flex-row gap-2 items-start">
@@ -63,8 +65,10 @@
         <form method="POST" use:enhance>
             <div class="flex flex-col gap-2">
                 {#if showExamples}
-                    <button type="button" on:click={() => (showExamples = false)} class="flex gap-1 items-center self-end text-amber-600 font-medium transition-all hover:text-amber-500 hover:cursor-pointer">Hide examples <IconClose /></button>
-                    <div class="p-4 rounded-2xl border-amber-500 border-[3px] border-dashed text-amber-500 mb-4 mt-2">
+                    <button type="button" on:click={() => (showExamples = false)} class="flex gap-1 items-center self-end text-yellow-600 font-medium transition-all hover:text-yellow-500 hover:cursor-pointer focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
+                        >Hide examples <IconClose /></button
+                    >
+                    <div class="p-4 rounded-2xl border-yellow-600 border-[3px] border-dashed text-dark-brown mb-4 mt-2">
                         <ul class="font-medium list-disc pl-4">
                             <li>Cozy painting vibes</li>
                             <li>Surprise party for someone who likes the military</li>
@@ -72,13 +76,15 @@
                         </ul>
                     </div>
                 {:else}
-                    <button type="button" on:click={() => (showExamples = true)} class="flex gap-1 items-center self-end text-amber-600 font-medium transition-all hover:text-amber-500 hover:cursor-pointer">Show examples <IconInfo /></button>
+                    <button type="button" on:click={() => (showExamples = true)} class="flex gap-1 items-center self-end text-yellow-600 font-medium transition-all hover:text-yellow-500 hover:cursor-pointer focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
+                        >Show examples <IconInfo /></button
+                    >
                 {/if}
 
                 <input
                     name="prompt"
                     placeholder="Beach wedding in Italy"
-                    class="border-[3px] border-dark-brown rounded-2xl p-3 w-full text-lg text-center font-medium text-dark-brown transition-all hover:shadow-lg hover:-translate-y-[2px] focus-visible:outline-amber-300 outline-offset-4"
+                    class="border-[3px] border-dark-brown rounded-2xl p-3 w-full text-lg text-center font-medium text-dark-brown transition-all hover:shadow-xl hover:shadow-orange-200/50 hover:-translate-y-[2px] focus:outline-0 focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
                     bind:value={$form.prompt}
                 />
                 <div class="flex items-center w-full justify-end gap-2">
@@ -110,6 +116,6 @@
         {/each}
     </div>
     <footer class="font-medium flex justify-center items-center pb-8 pt-32">
-        <p>A weekend project by <a href="https://maxmckinney.com" class="underline font-medium text-amber-600 transition-colors hover:text-amber-500">Max McKinney</a></p>
+        <p>A weekend project by <a href="https://maxmckinney.com" class="underline font-medium text-yellow-600 transition-colors hover:text-yellow-500 focus-visible:outline-offset-2 focus-visible:outline-yellow-500">Max McKinney</a></p>
     </footer>
 </div>
