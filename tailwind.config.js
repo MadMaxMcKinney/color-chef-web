@@ -4,7 +4,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter var']
+                sans: ['DM Sans', 'sans-serif'],
+                display: ['Caudex', 'serif']
             },
             colors: {
                 'dark-brown': '#3A300A'
